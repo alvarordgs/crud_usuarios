@@ -1,20 +1,19 @@
 const botaoSubmit = document.querySelector('[data-submit]');
 let dataArray = JSON.parse(localStorage.getItem('usersData')) || [];
+const dataList = document.querySelector('[data-user="list"]');
 
+if(!dataArray.length) {
+    dataList.innerHTML = "<p style='text-align: center;'>Não há nenhum usuário cadastrado!</p>"
+}
+
+/*Carrega os elementos com os dados na tela*/
 if(dataArray) {
     dataArray.forEach((data) => {
         handleCreateNewItem(data)
     })
 }
 
-const btnsEdit = document.querySelectorAll('[data-icon="edit"]');
-
-btnsEdit.forEach((btn) => {
-    btn.addEventListener('click', function(e) {
-        handleEditItem(e);
-    })
-})
-
+/*Create*/
 botaoSubmit.addEventListener('click', (e) => {
     e.preventDefault();
     
@@ -44,7 +43,7 @@ botaoSubmit.addEventListener('click', (e) => {
 function handleSaveNewItem(item) {
     dataArray.push(item);
 
-    localStorage.setItem('usersData', JSON.stringify(dataArray));
+    saveData();
 }
 
 function handleCreateNewItem(item) {
@@ -101,6 +100,7 @@ function handleCreateNewItem(item) {
 
     const itemList = document.createElement('li')
     itemList.classList.add('user-item')
+    itemList.dataset.id = item.id;
 
     itemList.appendChild(spanId)
     itemList.appendChild(inputNome)
@@ -109,12 +109,32 @@ function handleCreateNewItem(item) {
     itemList.appendChild(divIcons)
 
     list.appendChild(itemList);
+
+    /*Adiciona os eventos assim que o elemento é criado*/
+    const btnsEdit = document.querySelectorAll('[data-icon="edit"]');
+    const btnsDelete = document.querySelectorAll('[data-icon="del"]');
+
+    btnsEdit.forEach((btn) => {
+        btn.addEventListener('click', function(e) {
+            handleEditItem(e);
+        })
+    })
+    
+    btnsDelete.forEach((btn) => {
+        btn.addEventListener('click', function(e) {
+            handleDeleteItem(e);
+        })
+    })
 }
 
+
+/*Edit*/
 function handleEditItem(e) {
     itemEditar = e.target.parentNode.parentNode;
     iconAtual = e.target;
     const inputs = itemEditar.querySelectorAll('.inputList');
+
+    console.log(itemEditar)
 
     if(iconAtual.innerText == "create") {
         iconAtual.innerText = "save";
@@ -124,6 +144,22 @@ function handleEditItem(e) {
         });
 
     } else {
+        const id = +itemEditar.dataset.id;
+        const nome = itemEditar.querySelector('[data-input="nome"]').value;
+        const telefone = itemEditar.querySelector('[data-input="tel"]').value;
+        const cpf = itemEditar.querySelector('[data-input="cpf"]').value;
+        console.log(id);
+
+        const itemEditado = {
+            id,
+            nome,
+            telefone,
+            cpf
+        }
+
+        dataArray[dataArray.findIndex( elemento => elemento.id === itemEditado.id)] = itemEditado;
+        saveData();
+
         e.target.innerText = "create";
 
         inputs.forEach(input => {
@@ -131,6 +167,23 @@ function handleEditItem(e) {
         });
     }
 
+}
+
+/*Delete*/
+function handleDeleteItem(e) {
+    const elementoAtual = e.target.parentNode.parentNode;
+    const idElementoAtual = +elementoAtual.dataset.id;
+
+    elementoAtual.remove();
+
+    dataArray.splice(dataArray.findIndex(elemento => elemento.id === idElementoAtual), 1);
+
+    saveData() ;
+}
+
+/*Salva os dados no array para ser armazenado no localStorage*/
+function saveData() {
+    localStorage.setItem('usersData', JSON.stringify(dataArray));
 }
 
 

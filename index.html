@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Usuários</title>
+
+    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <main class="main-container">
+        <header>
+            <h1 class="title">Crud de usuários</h1>
+            <form class="form-container">
+                <input type="text" name="nome" placeholder="Nome">
+                <input type="text" name="telefone" placeholder="Telefone">
+                <input type="text" name="cpf" placeholder="CPF">
+                <input type="submit" value="Enviar" data-submit>
+            </form>
+        </header>
+        <ul class="users-list" data-user="list">
+            <!-- <li class="user-item">
+                <span>0</span>
+                <input type="text" class="inputList" data-input="nome" value="Alvaro" disabled>
+                <input type="text" class="inputList" data-input="tel" value="(34) 98888-8888" disabled>
+                <input type="text" class="inputList" data-input="cpf" value="000.000.000-00" disabled>
+                <div class="user-actions">
+                    <i class="material-icons user-icon edit" data-icon="edit">create</i>
+                    <i class="material-icons user-icon del" data-icon="del">cancel</i>
+                </div>
+            </li>  -->
+        </ul>
+    </main>
+
+    <script src="./main.js"></script>
+</body>
+</html>

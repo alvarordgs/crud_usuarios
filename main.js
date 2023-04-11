@@ -1,10 +1,5 @@
 const botaoSubmit = document.querySelector('[data-submit]');
 let dataArray = JSON.parse(localStorage.getItem('usersData')) || [];
-const dataList = document.querySelector('[data-user="list"]');
-
-if(!dataArray.length) {
-    dataList.innerHTML = "<p style='text-align: center;'>Não há nenhum usuário cadastrado!</p>"
-}
 
 /*Carrega os elementos com os dados na tela*/
 if(dataArray) {
@@ -83,6 +78,7 @@ function handleCreateNewItem(item) {
     inputCpf.dataset.input = "cpf";
     inputCpf.value = item.cpf;
     inputCpf.setAttribute('disabled', true);
+    inputCpf.setAttribute('name', "cpf");
 
     const inputTel = document.createElement('input')
     inputTel.type = "text";
@@ -90,6 +86,7 @@ function handleCreateNewItem(item) {
     inputTel.dataset.input = "tel";
     inputTel.value = item.telefone;
     inputTel.setAttribute('disabled', true);
+    inputTel.setAttribute('name', "tel");
 
     const inputNome = document.createElement('input')
     inputNome.type = "text";
@@ -97,6 +94,7 @@ function handleCreateNewItem(item) {
     inputNome.dataset.input = "nome";
     inputNome.value = item.nome;
     inputNome.setAttribute('disabled', true);
+    inputNome.setAttribute('name', "nome");
 
     const itemList = document.createElement('li')
     itemList.classList.add('user-item')
@@ -111,20 +109,12 @@ function handleCreateNewItem(item) {
     list.appendChild(itemList);
 
     /*Adiciona os eventos assim que o elemento é criado*/
-    const btnsEdit = document.querySelectorAll('[data-icon="edit"]');
-    const btnsDelete = document.querySelectorAll('[data-icon="del"]');
+    const btnEdit = divIcons.querySelector('[data-icon="edit"]');
+    const btnDelete = divIcons.querySelector('[data-icon="del"]');
 
-    btnsEdit.forEach((btn) => {
-        btn.addEventListener('click', function(e) {
-            handleEditItem(e);
-        })
-    })
-    
-    btnsDelete.forEach((btn) => {
-        btn.addEventListener('click', function(e) {
-            handleDeleteItem(e);
-        })
-    })
+    btnEdit.addEventListener('click', handleEditItem)
+
+    btnDelete.addEventListener('click', handleDeleteItem)
 }
 
 
@@ -134,21 +124,16 @@ function handleEditItem(e) {
     iconAtual = e.target;
     const inputs = itemEditar.querySelectorAll('.inputList');
 
-    console.log(itemEditar)
-
     if(iconAtual.innerText == "create") {
         iconAtual.innerText = "save";
 
-        inputs.forEach(input => {
-            input.removeAttribute('disabled')
-        });
+        inputs.forEach(input => input.removeAttribute('disabled'))
 
     } else {
         const id = +itemEditar.dataset.id;
         const nome = itemEditar.querySelector('[data-input="nome"]').value;
         const telefone = itemEditar.querySelector('[data-input="tel"]').value;
         const cpf = itemEditar.querySelector('[data-input="cpf"]').value;
-        console.log(id);
 
         const itemEditado = {
             id,
@@ -162,9 +147,7 @@ function handleEditItem(e) {
 
         e.target.innerText = "create";
 
-        inputs.forEach(input => {
-            input.setAttribute('disabled', true)
-        });
+        inputs.forEach(input => input.setAttribute('disabled', true));
     }
 
 }
@@ -185,5 +168,7 @@ function handleDeleteItem(e) {
 function saveData() {
     localStorage.setItem('usersData', JSON.stringify(dataArray));
 }
+
+
 
 
